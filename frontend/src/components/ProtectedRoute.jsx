@@ -11,7 +11,6 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    // Only redirect if we're not already on login page to prevent loops
     if (location.pathname !== '/login') {
       return <Navigate to="/login" state={{ from: location }} replace />
     }
