@@ -16,7 +16,7 @@ import TaskDetail from './pages/TaskDetail'
 import Profile from './pages/Profile'
 import NotFound from './pages/NotFound'
 
-// Components
+
 import ProtectedRoute from './components/ProtectedRoute'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -24,18 +24,15 @@ function App() {
   const dispatch = useDispatch()
   const { loading, token, isAuthenticated } = useSelector((state) => state.auth)
 
-  // Check authentication on app load
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem('token')
     if (tokenFromStorage && !isAuthenticated) {
       dispatch(getCurrentUser())
     } else if (!tokenFromStorage && isAuthenticated) {
-      // If no token in storage but state says authenticated, clear the state
       dispatch(logout())
     }
   }, [dispatch, isAuthenticated])
 
-  // Show loading spinner while checking authentication
   if (loading && !isAuthenticated) {
     return <LoadingSpinner text="Checking authentication..." />
   }
