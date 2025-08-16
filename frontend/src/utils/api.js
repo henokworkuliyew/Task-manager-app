@@ -1,15 +1,39 @@
 import axios from 'axios'
+import { getApiUrl, config } from '../config/config.js'
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL }/api`,
-  timeout: 10000,
+  baseURL: getApiUrl(),
+  timeout: config.api.timeout,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
+// Log the API configuration for debugging
+console.log('🌐 API Configuration:', {
+  baseURL: getApiUrl(),
+  timeout: config.api.timeout,
+  environment: import.meta.env.MODE,
+  devMode: import.meta.env.DEV
+});
+
+// Log environment information for debugging
+console.log('🌍 Environment Info:', {
+  mode: import.meta.env.MODE,
+  dev: import.meta.env.DEV,
+  prod: import.meta.env.PROD
+});
+
 api.interceptors.request.use(
   (config) => {
+    // Log API requests for debugging
+    console.log('📡 API Request:', {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      baseURL: config.baseURL,
+      fullURL: `${config.baseURL}${config.url}`
+    });
+    
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -17,6 +41,7 @@ api.interceptors.request.use(
     return config
   },
   (error) => {
+    console.error('🚨 Request Error:', error);
     return Promise.reject(error)
   }
 )
@@ -26,6 +51,16 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
+    // Enhanced error logging
+    console.error('🚨 API Error:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      url: error.config?.url,
+      method: error.config?.method,
+      baseURL: error.config?.baseURL
+    });
+    
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       delete api.defaults.headers.common['Authorization']

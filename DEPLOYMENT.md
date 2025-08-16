@@ -3,6 +3,8 @@
 ## Current Issue
 Your backend is experiencing CORS (Cross-Origin Resource Sharing) issues when deployed on Render. The frontend at `https://task-manager-frontend-x3pe.onrender.com` cannot communicate with the backend at `https://task-manager-backend-ubgg.onrender.com`.
 
+Additionally, when running locally, the frontend was trying to connect to `localhost:5000` instead of your deployed backend.
+
 ## What I've Fixed
 
 ### 1. Enhanced CORS Configuration
@@ -11,7 +13,13 @@ Your backend is experiencing CORS (Cross-Origin Resource Sharing) issues when de
 - Added comprehensive CORS headers
 - Added debugging logs to help troubleshoot
 
-### 2. Environment Variables Required
+### 2. Frontend API Configuration
+- Created smart API URL detection that automatically switches between development and production
+- Added comprehensive logging for debugging API connections
+- Created centralized configuration files for easy management
+- Fixed the issue where local development was trying to connect to deployed backend
+
+### 3. Environment Variables Required
 Your backend needs these environment variables set in Render:
 
 ```bash
@@ -44,6 +52,12 @@ PORT=5000
 2. Test the CORS endpoint: `https://task-manager-backend-ubgg.onrender.com/api/cors-test`
 3. Check browser console for CORS errors
 
+### 4. Test Frontend Configuration
+1. **Local Development**: Run `npm run dev` and check console for API URL logs
+2. **Production Build**: Run `npm run build` and check the built files
+3. **Browser Console**: Look for environment and API configuration logs
+4. **API Requests**: Check that requests are going to the correct backend URL
+
 ## CORS Configuration Details
 
 The updated CORS configuration:
@@ -51,6 +65,14 @@ The updated CORS configuration:
 - Handles preflight OPTIONS requests properly
 - Sets appropriate headers for credentials and methods
 - Includes debugging logs for troubleshooting
+
+## Frontend Configuration Details
+
+The frontend now automatically detects the environment:
+- **Development**: Uses `http://localhost:5000/api` for local development
+- **Production**: Uses `https://task-manager-backend-ubgg.onrender.com/api` for deployed app
+- **Smart Switching**: No manual configuration needed between environments
+- **Comprehensive Logging**: Detailed logs in browser console for debugging
 
 ## Common Issues & Solutions
 
@@ -86,3 +108,4 @@ Check the Render logs for:
 5. If issues persist, check the Render logs for debugging information
 
 The CORS configuration is now much more robust and should resolve your deployment issues.
+
