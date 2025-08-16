@@ -17,6 +17,5 @@ export const store = configureStore({
     }),
 })
 
-// Export store types for use in components
 export const getState = store.getState
 export const dispatch = store.dispatch
