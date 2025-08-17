@@ -8,7 +8,7 @@ import uiReducer from './slices/uiSlice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'] // Only persist auth state
+  whitelist: ['auth'] 
 }
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer)
@@ -28,6 +28,7 @@ export const store = configureStore({
 })
 
 export const persistor = persistStore(store)
+
 
 
 

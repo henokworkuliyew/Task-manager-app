@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { authAPI } from '../../utils/api'
 
-// Async thunks
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {
@@ -199,7 +198,6 @@ const authSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      // Get Current User
       .addCase(getCurrentUser.pending, (state) => {
         state.loading = true
         state.error = null
@@ -218,7 +216,6 @@ const authSlice = createSlice({
         localStorage.removeItem('token')
         state.error = action.payload
       })
-      // Forgot Password
       .addCase(forgotPassword.pending, (state) => {
         state.forgotPasswordLoading = true
         state.error = null

@@ -9,7 +9,6 @@ const api = axios.create({
   },
 })
 
-// Log the API configuration for debugging
 console.log('🌐 API Configuration:', {
   baseURL: getApiUrl(),
   timeout: config.api.timeout,
@@ -17,7 +16,6 @@ console.log('🌐 API Configuration:', {
   devMode: import.meta.env.DEV
 });
 
-// Log environment information for debugging
 console.log('🌍 Environment Info:', {
   mode: import.meta.env.MODE,
   dev: import.meta.env.DEV,
@@ -26,7 +24,6 @@ console.log('🌍 Environment Info:', {
 
 api.interceptors.request.use(
   (config) => {
-    // Log API requests for debugging
     console.log('📡 API Request:', {
       method: config.method?.toUpperCase(),
       url: config.url,
@@ -51,7 +48,6 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
-    // Enhanced error logging
     console.error('🚨 API Error:', {
       message: error.message,
       status: error.response?.status,

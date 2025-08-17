@@ -13,43 +13,34 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 
-// CORS configuration - MUST BE FIRST MIDDLEWARE!
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? [
-        process.env.FRONTEND_URL || 'https://task-manager-frontend-x3pe.onrender.com',
-        'https://task-manager-frontend-x3pe.onrender.com' // Fallback
-      ]
-    : ['http://localhost:3000', 'http://localhost:5173'],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'https://task-manager-frontend-x3pe.onrender.com'
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('🚫 CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
   optionsSuccessStatus: 200,
+  preflightContinue: false
 };
 
-// Apply CORS middleware first
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
 app.options('*', cors(corsOptions));
-
-// Add additional CORS headers for production
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    
-    if (req.method === 'OPTIONS') {
-      console.log('🔄 Handling OPTIONS preflight request');
-      res.sendStatus(200);
-    } else {
-      next();
-    }
-  });
-}
 
 connectDB();
 
@@ -79,22 +70,33 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log(`🌐 Request Origin: ${req.headers.origin}`);
+  console.log(`🔍 User Agent: ${req.headers['user-agent']}`);
   next();
 });
 
+// Enhanced health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     message: 'Task Manager API is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    cors: {
+      allowedOrigins: ['http://localhost:3000', 'http://localhost:5173', 'https://task-manager-frontend-x3pe.onrender.com'],
+      currentOrigin: req.headers.origin
+    }
   });
 });
 
+// Enhanced CORS test endpoint
 app.get('/api/cors-test', (req, res) => {
   res.status(200).json({
     message: 'CORS is working!',
     origin: req.headers.origin,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    headers: req.headers,
+    corsStatus: 'success'
   });
 });
 
