@@ -24,7 +24,7 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:5173',
-      'https://task-manager-frontend-x3pe.onrender.com'
+      'https://task-manager-c9up.onrender.com'
     ];
     
     if (allowedOrigins.indexOf(origin) !== -1) {
