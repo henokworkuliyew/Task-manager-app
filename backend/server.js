@@ -13,6 +13,10 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 
+
+//the error is around here I try to debug after you merge the code
+
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
