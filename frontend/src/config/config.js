@@ -3,9 +3,11 @@ export const config = {
 
   api: {
     development: 'http://localhost:5000/api',
-    production: 'https://task-manager-backend-ubgg.onrender.com/api',
+    // production: 'https://task-manager-backend-ubgg.onrender.com/api',
+    production: 'https://task-manager-app-vtyc.onrender.com/api',
     timeout: 10000,
-  },
+  }, 
+  
   
   app: {
     name: 'Task Manager',
