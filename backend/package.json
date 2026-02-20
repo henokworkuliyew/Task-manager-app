@@ -23,13 +23,13 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^4.22.1",
     "express-rate-limit": "^6.10.0",
-    "express-validator": "^7.0.1",
+    "express-validator": "^7.3.1",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
-    "nodemailer": "^6.10.1"
+    "nodemailer": "^7.0.11"
   },
   "devDependencies": {
     "jest": "^29.6.2",
